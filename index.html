@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake</title>
+  </head>
+  <body>
+    <!-- Contenedor principal -->
+    <div class="wrapper">
+      <!-- Panel superior con estadísticas (Puntaje y Récord) -->
+      <div class="game-details">
+        <div class="score">Score: 0</div>
+        <div class="high-score">High Score: 0</div>
+      </div>
+
+      <!-- Tablero donde se muestran la serpiente y la comida -->
+      <div class="game"></div>
+
+      <!-- Pantalla de Fin del Juego (inicialmente oculta con la clase 'hidden') -->
+      <div class="game-over hidden">
+        <h1>¡Perdiste!</h1>
+        <p id="final-score"></p>
+        <!-- Botón para reiniciar la página y volver a jugar -->
+        <button onclick="location.reload()">Jugar otra vez</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
