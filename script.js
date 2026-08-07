@@ -149,6 +149,6 @@ const initGame = () => {
 };
 
 // INICIALIZACIÓN DE EVENTOS Y BUCLE
-setIntervalId = setInterval(initGame, 125); // Velocidad de la serpiente
+setIntervalId = setInterval(initGame, 180); // Velocidad de la serpiente
 changeFoodPosition();
 document.addEventListener("keydown", changeDirection);
