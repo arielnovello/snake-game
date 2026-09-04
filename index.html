@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="style.css" />
@@ -9,21 +9,25 @@
   <body>
     <!-- Contenedor principal -->
     <div class="wrapper">
-      <!-- Panel superior con estadísticas (Puntaje y Récord) -->
+      <!-- Panel superior con estadísticas -->
       <div class="game-details">
-        <div class="score">Score: 0</div>
-        <div class="high-score">High Score: 0</div>
+        <div class="score">Puntaje: 0 / 50</div>
+        <div class="biome-name">Pradera</div>
+        <div class="high-score">Récord: 0</div>
       </div>
+
+      <div class="objective">Cargando objetivo...</div>
 
       <!-- Tablero donde se muestran la serpiente y la comida -->
       <div class="game"></div>
 
-      <!-- Pantalla de Fin del Juego (inicialmente oculta con la clase 'hidden') -->
+      <!-- Pantalla de Fin del Juego / Victoria -->
       <div class="game-over hidden">
-        <h1>¡Perdiste!</h1>
-        <p id="final-score"></p>
-        <!-- Botón para reiniciar la página y volver a jugar -->
-        <button onclick="location.reload()">Jugar otra vez</button>
+        <div class="game-over-content">
+          <h1 id="game-over-title">Juego Terminado</h1>
+          <div id="final-score"></div>
+          <button onclick="location.reload()">Jugar otra vez</button>
+        </div>
       </div>
     </div>
     <script src="script.js"></script>
