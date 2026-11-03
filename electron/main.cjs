@@ -1,13 +1,14 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, screen } = require("electron");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 
 function createWindow() {
+  const area = screen.getPrimaryDisplay().workAreaSize;
   const window = new BrowserWindow({
-    width: 620,
-    height: 780,
-    minWidth: 380,
-    minHeight: 520,
+    width: Math.min(1040, area.width - 24),
+    height: Math.min(960, area.height - 24),
+    minWidth: Math.min(840, area.width - 24),
+    minHeight: Math.min(640, area.height - 24),
     backgroundColor: "#4a752c",
     autoHideMenuBar: true,
     webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true },

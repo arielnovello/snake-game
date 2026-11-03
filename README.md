@@ -1,59 +1,54 @@
-# 🐍 Snake Game
+# Viborita
 
-Un juego clásico de la serpiente desarrollado con **HTML, CSS y JavaScript** como proyecto de práctica para la materia de Programación II.
+Juego de la viborita con consignas numéricas, hecho con HTML, CSS y JavaScript para Programación II.
 
----
+## Cómo se juega
 
-## 📷 Vista previa
+Movete con las flechas o WASD y comé los números que cumplen la consigna del panel. Son ocho aciertos por bioma: cuarenta para ganar.
 
-![alt text](image.png)
+- Pradera: múltiplos de 2, 3 o 4.
+- Desierto: números pares.
+- Nieve: números impares.
+- Espacio: números mayores que el indicado.
+- Volcán: números menores que 6.
 
----
+El borde, el cuerpo y un número incorrecto terminan la partida. Espacio pausa el juego y M activa o silencia el sonido. Al cambiar de ventana también se pausa.
 
-## 🎮 Características
+Para cambiar de bioma hay que pulsar Enter o Seguir. Las flechas no cierran el objetivo. Después de confirmar, elegí una dirección para retomar.
 
-- Movimiento mediante las flechas del teclado.
-- Generación aleatoria de comida.
-- La comida nunca aparece sobre la serpiente.
-- Sistema de puntaje.
-- Guardado del puntaje máximo mediante LocalStorage.
-- Pantalla personalizada de Game Over.
-- Sonidos al comer, perder y reiniciar la partida.
-- Diseño responsive.
+La grilla es de 12 × 12 y la velocidad es fija. Hay cinco frutas visibles; se repone solamente la que comiste. Las nuevas se forman antes de poder comerse y no aparecen pegadas a la viborita.
 
----
+## Ranking local
 
-## 🛠 Tecnologías utilizadas
+Cuando completás los cinco biomas, podés escribir tu nombre y guardar tu tiempo. Se muestran los diez mejores tiempos de ganadores, del menor al mayor. Solo se cuenta el tiempo jugando: quedan fuera las pausas, la lectura entre biomas y la espera antes de empezar.
 
-- HTML5
-- CSS3
-- JavaScript (ES6)
+Se guarda en LocalStorage y sigue disponible al cerrar y volver a abrir. Cada navegador, perfil y aplicación mantiene su propio ranking. No se comparte por Internet y puede perderse si se borran los datos del navegador.
 
----
+## Abrir en Windows
 
-## 📚 Conceptos aplicados
+Descargá `Snake-Game-1.7.0-Windows.exe` de la Release. Es portable y no necesita instalar Node ni Electron.
 
-- Manipulación del DOM.
-- Eventos de teclado.
-- CSS Grid.
-- LocalStorage.
-- Temporizadores (`setInterval`).
-- Arreglos y lógica de colisiones.
-- Generación aleatoria.
-- Reproducción de audio mediante JavaScript.
+## Desarrollo
 
----
+```sh
+npm ci
+npm run dev
+```
 
-## 🎵 Recursos utilizados
+También se puede jugar abriendo `index.html` en el navegador.
 
-Los efectos de sonido fueron obtenidos de **Pixabay**, bajo su licencia de contenido.
+```sh
+npm test
+npm run test:electron
+npm run dist
+```
 
-https://pixabay.com/sound-effects/
+El ejecutable se genera en `dist/`. Hay más detalles en [ELECTRON.md](ELECTRON.md).
 
----
+## Créditos
 
-## 👨‍💻 Autor
+Ariel. Proyecto educativo.
 
-Ariel
+Logo de la escuela e identificación TSDS: Técnico Superior en Desarrollo de Software.
 
-Proyecto realizado con fines educativos.
+Efectos de sonido de [Pixabay](https://pixabay.com/sound-effects/), bajo su licencia de contenido.

@@ -2,34 +2,58 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="style.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Snake</title>
+    <title>Viborita</title>
   </head>
   <body>
-    <!-- Contenedor principal -->
-    <div class="wrapper">
-      <!-- Panel superior con estadísticas -->
+    <main class="wrapper">
+      <header class="game-heading">
+        <h1>Viborita</h1>
+        <span class="biome-step" aria-label="Bioma actual">1 / 5</span>
+      </header>
       <div class="game-details">
-        <div class="score">Puntaje: 0 / 50</div>
-        <div class="biome-name">Pradera</div>
-        <div class="high-score">Récord: 0</div>
+        <span class="score">Puntaje: 0 / 40</span>
+        <span class="biome-name">Pradera</span>
+        <span class="high-score">Récord: 0</span>
+        <span class="run-time">Tiempo: 0:00</span>
       </div>
-
-      <div class="objective">Cargando objetivo...</div>
-
-      <!-- Tablero donde se muestran la serpiente y la comida -->
+      <section class="objective" aria-labelledby="objective-title">
+        <span class="objective-label">Comé únicamente</span>
+        <h2 id="objective-title">Múltiplos</h2>
+        <p class="objective-explanation"></p>
+        <p class="objective-examples"></p>
+        <div class="objective-count"><span>Aciertos en este bioma</span><strong class="objective-progress">0 de 8</strong></div>
+        <button id="continue" type="button" class="hidden">Seguir</button>
+      </section>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div>
       <div class="game"></div>
-
-      <!-- Pantalla de Fin del Juego / Victoria -->
-      <div class="game-over hidden">
-        <div class="game-over-content">
-          <h1 id="game-over-title">Juego Terminado</h1>
-          <div id="final-score"></div>
-          <button onclick="location.reload()">Jugar otra vez</button>
+      <div class="controls">
+        <span class="status" aria-live="polite">Flechas / WASD</span>
+        <button id="sound" type="button" aria-pressed="false" title="Activar o silenciar el sonido (M)">Sonido</button>
+        <button id="pause" type="button" aria-pressed="false" title="Pausar o seguir (Espacio)">Pausar</button>
+        <div class="school-signature">
+          <img src="assets/images/logo-escuela.jpg" width="48" height="48" alt="Logo de la escuela" />
+          <div><strong>TSDS</strong><span>Técnico Superior en<br />Desarrollo de Software</span></div>
         </div>
       </div>
-    </div>
+      <section class="game-over hidden" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
+        <h2 id="game-over-title">Fin de la partida</h2>
+        <div id="final-score"></div>
+        <form id="winner-form" class="hidden">
+          <label for="player-name">Tu nombre</label>
+          <div class="winner-entry"><input id="player-name" name="player" maxlength="24" required autocomplete="off" /><button type="submit">Guardar tiempo</button></div>
+        </form>
+        <p id="ranking-status" role="status"></p>
+        <section class="ranking" aria-labelledby="ranking-title">
+          <h3 id="ranking-title">Ganadores · 10 mejores</h3>
+          <p id="ranking-empty">Todavía no hay tiempos guardados.</p>
+          <div class="ranking-table-wrap hidden"><table><thead><tr><th scope="col">Puesto</th><th scope="col">Nombre</th><th scope="col">Tiempo</th></tr></thead><tbody id="ranking-body"></tbody></table></div>
+          <p class="ranking-note">Ranking de este navegador. Se ordena por tiempo jugado.</p>
+        </section>
+        <button id="restart" type="button">Jugar otra vez</button>
+      </section>
+    </main>
     <script src="script.js"></script>
   </body>
 </html>

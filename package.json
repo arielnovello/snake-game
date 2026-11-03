@@ -1,6 +1,6 @@
 {
   "name": "snake-game",
-  "version": "1.0.0",
+  "version": "1.7.0",
   "description": "La viborita con desafíos matemáticos y cinco biomas",
   "author": "Ariel",
   "private": true,
@@ -8,7 +8,10 @@
   "scripts": {
     "start": "electron .",
     "package": "electron-builder --win dir",
-    "dist": "electron-builder --win portable"
+    "dist": "node scripts/build.cjs",
+    "dev": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "test:electron": "electron tests/electron-smoke.cjs"
   },
   "build": {
     "appId": "com.ariel.snakegame",
@@ -25,7 +28,7 @@
       "signAndEditExecutable": false
     },
     "artifactName": "Snake-Game-${version}-Windows.${ext}",
-    "compression": "store"
+    "compression": "normal"
   },
   "devDependencies": {
     "electron": "^45.1.0",
