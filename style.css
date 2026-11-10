@@ -28,11 +28,12 @@ body {
 .game-heading {
   display: flex;
   align-items: baseline;
+  gap: 8px;
   justify-content: space-between;
   padding: 14px 18px 8px;
 }
 h1 { margin: 0; font-size: 22px; letter-spacing: -.5px; }
-.biome-step { font-size: 12px; opacity: .7; font-variant-numeric: tabular-nums; }
+.biome-step { flex-shrink: 0; font-size: 12px; opacity: .7; font-variant-numeric: tabular-nums; }
 .game-details {
   display: flex;
   align-items: center;
@@ -215,3 +216,4 @@ button:focus-visible { outline: 3px solid #edcc65; outline-offset: 2px; }
   .game-details { flex-wrap: wrap; }
   .run-time { flex-basis: 100%; }
 }
+

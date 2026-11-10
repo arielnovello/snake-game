@@ -1,6 +1,6 @@
 # Electron
 
-El portable de Windows se genera en `dist/Snake-Game-1.7.0-Windows.exe`.
+El portable de Windows se genera en `dist/Viborita-Matematica-1.7.0-Windows.exe`.
 
 ## Desarrollo y compilación
 
@@ -18,7 +18,7 @@ npm run dist
 
 ## Partida
 
-Grilla de 12 × 12, 165 ms por casilla, ocho aciertos en cada uno de los cinco biomas. La lógica usa casillas y la animación interpola el recorrido con requestAnimationFrame. El tablero conserva cinco frutas; las apariciones quedan entre cinco y diez casillas de la cabeza, separadas del cuerpo y de otras frutas.
+Grilla de 12 × 12, 206,25 ms por casilla, diez aciertos en cada uno de los cinco biomas. La lógica usa casillas y la animación interpola el recorrido con requestAnimationFrame. El tablero conserva cinco frutas; las apariciones quedan entre cinco y diez casillas de la cabeza, separadas del cuerpo y de otras frutas.
 
 Las frutas nuevas esperan 650 ms para reponerse y se forman durante 550 ms antes de poder comerse. Si la viborita ocupa la zona, se posterga su activación.
 
@@ -28,7 +28,7 @@ El logo original está en `assets/images/logo-escuela.jpg` y se integra visualme
 
 ## Ranking
 
-LocalStorage guarda los diez mejores ganadores en la clave `viborita-winners-v1`. Cada entrada tiene identificador, nombre, tiempo en milisegundos, fecha de registro y puntos. Solo se admiten victorias de cuarenta puntos. Se ordenan por tiempo ascendente y, si empatan, por fecha de registro.
+LocalStorage guarda los diez mejores ganadores en la clave `viborita-winners-v1`. Cada entrada tiene identificador, nombre, tiempo en milisegundos, fecha de registro y puntos. Solo se admiten victorias de cincuenta puntos. Se ordenan por tiempo ascendente y, si empatan, por fecha de registro.
 
 El reloj cuenta el tiempo real durante el movimiento. No cuenta la espera inicial, las pausas, la lectura de biomas, la espera de una dirección ni la escritura del nombre. El formulario solo aparece al ganar y cada partida se puede guardar una sola vez.
 

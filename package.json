@@ -15,7 +15,7 @@
   },
   "build": {
     "appId": "com.ariel.snakegame",
-    "productName": "Snake Game",
+    "productName": "Viborita Matemática",
     "files": [
       "electron/**/*",
       "index.html",
@@ -27,7 +27,7 @@
       "target": "portable",
       "signAndEditExecutable": false
     },
-    "artifactName": "Snake-Game-${version}-Windows.${ext}",
+    "artifactName": "Viborita-Matematica-${version}-Windows.${ext}",
     "compression": "normal"
   },
   "devDependencies": {

@@ -14,12 +14,16 @@ const ctx = canvas.getContext('2d');
 const eatSound = new Audio('assets/sounds/eat.mp3');
 const deathSound = new Audio('assets/sounds/death.mp3');
 const boardSize = 12;
-const stepDuration = 165;
-const minimumCorrect = () => currentLevel < 2 ? 2 : 1;
-const requiredProgress = 8;
+// Velocidad fija: milisegundos por casilla. Un valor mayor hace el juego más lento.
+// Ejemplos: 180 = más rápido; 206.25 = actual; 230 = más lento.
+const stepDuration = 206.25;
+const minimumCorrect = () => 3;
+const requiredProgress = 10;
 const fruitCount = 5;
 const spawnDuration = 550;
 const refillDelay = 650;
+const fruitRefreshInterval = 7000;
+let nextFruitRefresh = fruitRefreshInterval;
 const levels = [
   { biomeClass: '', biomeLabel: 'Pradera', color: '#e7471d' },
   { biomeClass: 'desierto', biomeLabel: 'Desierto', color: '#f49b25' },
@@ -176,12 +180,13 @@ const updateScore = () => {
 };
 const distance = (a, b) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
 const isFruitReady = fruit => gameTime >= (fruit.readyAt ?? 0);
-const createFruit = (delay = 0) => {
+const createFruit = (delay = 0, excludedCell = null) => {
   const head = snakeBody[0];
   const free = [];
   for (let y = 1; y <= boardSize; y++) {
     for (let x = 1; x <= boardSize; x++) {
       const cell = [x, y];
+      if (excludedCell && x === excludedCell[0] && y === excludedCell[1]) continue;
       if (distance(cell, head) < 5 || distance(cell, head) > boardSize - 2) continue;
       if (snakeBody.some(segment => distance(cell, segment) < 2)) continue;
       if (fruitsOnBoard.some(fruit => distance(cell, [fruit.x, fruit.y]) < 3)) continue;
@@ -203,6 +208,17 @@ const generateFruits = () => {
   fruitsOnBoard = [];
   for (let i = 0; i < fruitCount; i++) if (!createFruit(i * 65)) break;
   refillAt = gameTime + refillDelay;
+  nextFruitRefresh = gameTime + fruitRefreshInterval;
+};
+const refreshDistractor = () => {
+  // Conservamos los objetivos correctos para que el jugador pueda planear su recorrido.
+  const index = fruitsOnBoard.findIndex(fruit => !fruit.isCorrect && isFruitReady(fruit)
+    && distance([fruit.x, fruit.y], snakeBody[0]) >= 4
+    && pendingFinish?.fruit !== fruit);
+  if (index < 0) return false;
+  const [oldFruit] = fruitsOnBoard.splice(index, 1);
+  if (!createFruit(0, [oldFruit.x, oldFruit.y])) { fruitsOnBoard.splice(index, 0, oldFruit); return false; }
+  return true;
 };
 const updateFruits = () => {
   for (const fruit of fruitsOnBoard) {
@@ -216,6 +232,11 @@ const updateFruits = () => {
   if (gameTime >= refillAt && fruitsOnBoard.length < fruitCount) {
     createFruit();
     refillAt = gameTime + refillDelay;
+  }
+  if (started && !paused && !finished && !waitingForLevel && !awaitingDirection
+      && fruitsOnBoard.length === fruitCount && gameTime >= nextFruitRefresh) {
+    refreshDistractor();
+    nextFruitRefresh = gameTime + fruitRefreshInterval;
   }
   effects = effects.filter(effect => gameTime - effect.bornAt < 600);
 };
@@ -282,6 +303,10 @@ const resetGame = () => {
   updateScore();
   updateSound();
   startLevel();
+  waitingForLevel = true;
+  continueButton.classList.remove('hidden');
+  pauseButton.disabled = true;
+  statusElement.textContent = 'Leé el objetivo · Enter para seguir';
   render(1);
 };
 const togglePause = () => {

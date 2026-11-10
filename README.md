@@ -1,10 +1,10 @@
-# Viborita
+# Viborita Matemática
 
 Juego de la viborita con consignas numéricas, hecho con HTML, CSS y JavaScript para Programación II.
 
 ## Cómo se juega
 
-Movete con las flechas o WASD y comé los números que cumplen la consigna del panel. Son ocho aciertos por bioma: cuarenta para ganar.
+Movete con las flechas o WASD y comé los números que cumplen la consigna del panel. Son diez aciertos por bioma: cincuenta para ganar.
 
 - Pradera: múltiplos de 2, 3 o 4.
 - Desierto: números pares.
@@ -16,7 +16,7 @@ El borde, el cuerpo y un número incorrecto terminan la partida. Espacio pausa e
 
 Para cambiar de bioma hay que pulsar Enter o Seguir. Las flechas no cierran el objetivo. Después de confirmar, elegí una dirección para retomar.
 
-La grilla es de 12 × 12 y la velocidad es fija. Hay cinco frutas visibles; se repone solamente la que comiste. Las nuevas se forman antes de poder comerse y no aparecen pegadas a la viborita.
+La grilla es de 12 × 12 y la velocidad es fija. Hay cinco frutas: tres correctas y dos incorrectas. Se repone la que comiste y, cada 7 segundos de juego, se renueva una incorrecta lejos de la cabeza. Las correctas permanecen para poder planear el recorrido. Las nuevas se forman antes de poder comerse y no aparecen pegadas a la viborita.
 
 ## Ranking local
 
@@ -26,7 +26,7 @@ Se guarda en LocalStorage y sigue disponible al cerrar y volver a abrir. Cada na
 
 ## Abrir en Windows
 
-Descargá `Snake-Game-1.7.0-Windows.exe` de la Release. Es portable y no necesita instalar Node ni Electron.
+Descargá `Viborita-Matematica-1.7.0-Windows.exe` de la Release. Es portable y no necesita instalar Node ni Electron.
 
 ## Desarrollo
 
@@ -52,3 +52,6 @@ Ariel. Proyecto educativo.
 Logo de la escuela e identificación TSDS: Técnico Superior en Desarrollo de Software.
 
 Efectos de sonido de [Pixabay](https://pixabay.com/sound-effects/), bajo su licencia de contenido.
+
+### Ajustar la velocidad
+En `script.js`, cambiá `const stepDuration = 206.25;`: son milisegundos por casilla. Mayor valor = más lento (230); menor valor = más rápido (180). La velocidad se mantiene en todos los biomas. Guardá y recargá el juego.

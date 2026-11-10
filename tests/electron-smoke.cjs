@@ -12,6 +12,7 @@ app.whenReady().then(async () => {
   };
   try {
     await win.loadFile(path.join(__dirname, '..', 'index.html'));
+    await evaluate("if (!waitingForLevel || started) throw Error('Inicio incorrecto'); queueDirection([1,0]); if (started) throw Error('Se movió antes de confirmar'); document.querySelector('#continue').click(); if (waitingForLevel || started) throw Error('Inicio incorrecto tras confirmar');");
     const motion = await evaluate(`(async () => {
       fruitsOnBoard = []; refillAt = Infinity;
       document.dispatchEvent(new KeyboardEvent('keydown', {key:'ArrowRight'}));
@@ -27,7 +28,7 @@ app.whenReady().then(async () => {
     })()`);
     if (!motion.smooth || !motion.fractional || !motion.restarted) throw Error(JSON.stringify(motion));
     const food = await evaluate(`(() => {
-      resetGame(); snakeBody = [[8,8]]; previousBody = [[8,8]]; gameTime = 2000;
+      resetGame(); continueLevel(); snakeBody = [[8,8]]; previousBody = [[8,8]]; gameTime = 2000;
       fruitsOnBoard = [{x:9,y:8,value:2,isCorrect:true}, {x:3,y:3,value:7,isCorrect:false}, {x:12,y:3,value:4,isCorrect:true}, {x:3,y:12,value:11,isCorrect:false}, {x:12,y:12,value:6,isCorrect:true}];
       const survivors = fruitsOnBoard.slice(1);
       queueDirection([1,0]); resolveArrival(); paused = true;
@@ -46,7 +47,7 @@ app.whenReady().then(async () => {
     const objectiveCheck = await evaluate(`(() => {
       resetGame(); currentChallengeParam = 3; updateObjective();
       const clear = document.querySelector('#objective-title').textContent === 'Múltiplos de 3' && document.querySelector('.objective-examples').textContent.includes('3, 6, 9, 12');
-      const stablePace = stepDuration === 165 && !document.querySelector("#pace");
+      const stablePace = stepDuration === 206.25 && !document.querySelector("#pace");
       const logo = document.querySelector(".school-signature img");
       const schoolBrand = logo.complete && logo.naturalWidth > 0 && document.querySelector(".school-signature strong").textContent === "TSDS";
       started = true; currentLevel = 1; startLevel(); waitingForLevel = true; needsAdvance = true; continueButton.classList.remove('hidden');

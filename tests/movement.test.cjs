@@ -13,7 +13,7 @@ function setup(saved = {}, blocked = false) {
   const context = vm.createContext({ document: { querySelector: element, createElement: name => element(Symbol(name)), addEventListener() {} }, window: { devicePixelRatio: 1, addEventListener() {} }, localStorage: { getItem: key => storage.get(key) ?? null, setItem(key, value) { if (blocked) throw Error('Sin almacenamiento'); storage.set(key, String(value)); }, removeItem: key => storage.delete(key) }, Audio: class { play() { return Promise.resolve(); } }, ResizeObserver: class { observe() {} }, requestAnimationFrame() {} });
   vm.runInContext(fs.readFileSync('script.js', 'utf8'), context);
   // Las escenas de movimiento usan un punto de partida fijo; resetGame se prueba aparte.
-  vm.runInContext('snakeBody = [[8,8]]; previousBody = [[8,8]];', context);
+  vm.runInContext('continueLevel(); awaitingDirection = false; snakeBody = [[8,8]]; previousBody = [[8,8]];', context);
   return code => vm.runInContext(code, context);
 }
 test('interpola el movimiento en lugar de saltar una casilla', () => {
@@ -153,21 +153,21 @@ test('pausar también congela la aparición de comida y la pausa entre biomas', 
   assert.equal(run('gameTime'), 0);
 });
 
-test('la única velocidad es 165 ms en todos los biomas y no acelera por aciertos', () => {
+test('la única velocidad es 206.25 ms en todos los biomas y no acelera por aciertos', () => {
   const run = setup();
-  assert.equal(run('stepDuration'), 165);
+  assert.equal(run('stepDuration'), 206.25);
   for (let biome = 0; biome < 5; biome++) {
     run('currentLevel = ' + biome + '; startLevel(); currentBiomeProgress = 4;');
-    assert.equal(run('stepDuration'), 165);
+    assert.equal(run('stepDuration'), 206.25);
   }
   run('resetGame();');
-  assert.equal(run('stepDuration'), 165);
+  assert.equal(run('stepDuration'), 206.25);
 });
-test('los últimos biomas tienen una sola opción correcta entre cinco', () => {
+test('todos los biomas ofrecen tres opciones correctas entre cinco', () => {
   const run = setup();
   for (let biome = 0; biome < 5; biome++) {
     run('currentLevel = ' + biome + '; startLevel();');
-    assert.equal(run('fruitsOnBoard.filter(f => f.isCorrect).length'), biome < 2 ? 2 : 1);
+    assert.equal(run('fruitsOnBoard.filter(f => f.isCorrect).length'), 3);
     assert.equal(run('fruitsOnBoard.length'), 5);
   }
 });
@@ -200,15 +200,15 @@ test('el error de un número explica por qué no cumple el objetivo', () => {
 });
 test('una partida completa atraviesa los cinco objetivos y termina en victoria', () => {
   const run = setup();
-  for (let point = 0; point < 40; point++) {
+  for (let point = 0; point < 50; point++) {
     run('direction = snakeBody[0][1] % 2 === 0 ? (snakeBody[0][0] < boardSize ? [1,0] : [0,1]) : (snakeBody[0][0] > 1 ? [-1,0] : [0,1]); fruitsOnBoard = [{x:snakeBody[0][0]+direction[0], y:snakeBody[0][1]+direction[1], value:getChallenge().examples[0], isCorrect:true}]; started = true; advance(); resolveArrival();');
     assert.equal(run('score'), point + 1);
-    if (point < 39) {
+    if (point < 49) {
       assert.equal(run('finished'), false);
       if (run('waitingForLevel')) run('continueLevel(); needsAdvance = false; awaitingDirection = false;');
     }
   }
-  assert.equal(run('finished && currentLevel === 4 && score === 40'), true);
+  assert.equal(run('finished && currentLevel === 4 && score === 50'), true);
 });
 
 test('las flechas durante el cambio de bioma no cierran el objetivo ni guardan giros', () => {
@@ -251,10 +251,10 @@ test('confirmar cerca del borde no mueve hasta elegir una dirección segura', ()
 function win(run, time = 123450) {
   run('currentLevel = 4; currentBiomeProgress = requiredProgress; score = totalObjectivePoints; activeTime = ' + time + '; finishGame(true);');
 }
-test('cada bioma dura ocho aciertos y la partida completa suma cuarenta', () => {
+test('cada bioma dura diez aciertos y la partida completa suma cincuenta', () => {
   const run = setup();
-  assert.equal(run('requiredProgress'), 8);
-  assert.equal(run('totalObjectivePoints'), 40);
+  assert.equal(run('requiredProgress'), 10);
+  assert.equal(run('totalObjectivePoints'), 50);
   run('currentBiomeProgress = 4; score = 4; fruitsOnBoard = [{x:9,y:8,value:2,isCorrect:true}]; queueDirection([1,0]); resolveArrival();');
   assert.equal(run('currentLevel === 0 && currentBiomeProgress === 5 && !waitingForLevel'), true);
 });
@@ -285,8 +285,8 @@ test('una derrota no se puede guardar como victoria y un ganador no se duplica',
   assert.equal(run('readWinners().length'), 1);
 });
 test('el ranking ordena los diez mejores y mantiene el orden de llegada en empates', () => {
-  const rows = Array.from({length:12}, (_,i) => ({id:'seed-'+i,name:'Jugador '+i,timeMs:12000-i*100,at:i,points:40}));
-  rows.push({id:'tie', name:'Empate',timeMs:10900,at:99,points:40});
+  const rows = Array.from({length:12}, (_,i) => ({id:'seed-'+i,name:'Jugador '+i,timeMs:12000-i*100,at:i,points:50}));
+  rows.push({id:'tie', name:'Empate',timeMs:10900,at:99,points:50});
   const run = setup({'viborita-winners-v1':JSON.stringify(rows)});
   assert.equal(run('readWinners().length'),10);
   assert.equal(run('readWinners()[0].name'),'Jugador 11');
@@ -308,4 +308,34 @@ test('los nombres se muestran como texto y los nombres vacíos no se guardan', (
   assert.equal(run('readWinners().length'),0);
   run('playerName.value = "<b>Ana</b>"; saveWinner();');
   assert.equal(run('document.querySelector("#ranking-body").children[0].children[1].textContent'),'<b>Ana</b>');
+});
+
+ test('al iniciar y reiniciar muestra el primer objetivo y espera confirmación', () => {
+  const run = setup();
+  run('resetGame(); queueDirection([1,0]); frame(0); frame(100);');
+  assert.equal(run('waitingForLevel && !started && score === 0 && activeTime === 0'), true);
+  assert.equal(run('JSON.stringify(snakeBody[0])'), '[6,6]');
+  run('continueLevel(); frame(200); frame(300);');
+  assert.equal(run('awaitingDirection && !started'), true);
+  run('queueDirection([1,0]);');
+  assert.equal(run('started && !waitingForLevel && !awaitingDirection'), true);
+});
+
+test('la renovación conserva los objetivos y aparece lejos con aviso previo', () => {
+  const run = setup();
+  run('gameTime = 2000; fruitsOnBoard.forEach(f => { f.readyAt = 0; }); globalThis.targets = fruitsOnBoard.filter(f => f.isCorrect); globalThis.oldWrong = fruitsOnBoard.filter(f => !f.isCorrect); globalThis.refreshed = refreshDistractor();');
+  assert.equal(run('refreshed'), true);
+  assert.equal(run('targets.every(f => fruitsOnBoard.includes(f))'), true);
+  assert.equal(run('fruitsOnBoard.filter(f => !targets.includes(f) && !oldWrong.includes(f)).length'), 1);
+  assert.equal(run('fruitsOnBoard.length === 5 && fruitsOnBoard.filter(f => f.isCorrect).length === 3'), true);
+  assert.equal(run('fruitsOnBoard.filter(f => !targets.includes(f) && !oldWrong.includes(f)).every(f => !isFruitReady(f) && distance([f.x,f.y],snakeBody[0]) >= 5)'), true);
+});
+test('la renovación automática espera mientras se lee o se pausa', () => {
+  const run = setup();
+  run('gameTime = 10000; nextFruitRefresh = 0; waitingForLevel = true; globalThis.before = fruitsOnBoard.slice(); updateFruits();');
+  assert.equal(run('before.every(f => fruitsOnBoard.includes(f))'), true);
+  run('waitingForLevel = false; started = true; paused = true; updateFruits();');
+  assert.equal(run('before.every(f => fruitsOnBoard.includes(f))'), true);
+  run('paused = false; updateFruits();');
+  assert.equal(run('nextFruitRefresh === gameTime + fruitRefreshInterval'), true);
 });
