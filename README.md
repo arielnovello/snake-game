@@ -26,7 +26,7 @@ Se guarda en LocalStorage y sigue disponible al cerrar y volver a abrir. Cada na
 
 ## Abrir en Windows
 
-Descargá `Viborita-Matematica-1.7.0-Windows.exe` de la Release. Es portable y no necesita instalar Node ni Electron.
+Descargá `Viborita-Matematica-1.8.0-Windows.exe` de la Release. Es portable y no necesita instalar Node ni Electron.
 
 ## Desarrollo
 

@@ -1,6 +1,6 @@
 # Electron
 
-El portable de Windows se genera en `dist/Viborita-Matematica-1.7.0-Windows.exe`.
+El portable de Windows se genera en `dist/Viborita-Matematica-1.8.0-Windows.exe`.
 
 ## Desarrollo y compilación
 
